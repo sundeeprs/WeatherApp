@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Weather Today</string>
+    <string name="search_hint">Type and Search City</string>
+    <string name="search_result">Please enter city name in Search bar to check weather!</string>
+    <string name="action_settings">Settings</string>
+    <string name="menu_search">Search City</string>
+</resources>
