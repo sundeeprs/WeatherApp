@@ -1,12 +1,15 @@
 package com.dynasoft.weather.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-/**
+/*
  * Created by sundeep on 10/11/17.
  */
 
-public class OpenWeatherMap {
+public class OpenWeatherMap implements Parcelable{
 
     private Coord coord;
     private List<WeatherList> weather;
@@ -136,4 +139,52 @@ public class OpenWeatherMap {
     public void setVisibility(String visibility) {
         visibility = visibility;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.coord, flags);
+        dest.writeTypedList(this.weather);
+        dest.writeString(this.base);
+        dest.writeParcelable(this.main, flags);
+        dest.writeParcelable(this.wind, flags);
+        dest.writeParcelable(this.clouds, flags);
+        dest.writeInt(this.dt);
+        dest.writeParcelable(this.sys, flags);
+        dest.writeString(this.visibility);
+        dest.writeInt(this.id);
+        dest.writeString(this.name);
+        dest.writeInt(this.cod);
+    }
+
+    protected OpenWeatherMap(Parcel in) {
+        this.coord = in.readParcelable(Coord.class.getClassLoader());
+        this.weather = in.createTypedArrayList(WeatherList.CREATOR);
+        this.base = in.readString();
+        this.main = in.readParcelable(Main.class.getClassLoader());
+        this.wind = in.readParcelable(Wind.class.getClassLoader());
+        this.clouds = in.readParcelable(Clouds.class.getClassLoader());
+        this.dt = in.readInt();
+        this.sys = in.readParcelable(Sys.class.getClassLoader());
+        this.visibility = in.readString();
+        this.id = in.readInt();
+        this.name = in.readString();
+        this.cod = in.readInt();
+    }
+
+    public static final Creator<OpenWeatherMap> CREATOR = new Creator<OpenWeatherMap>() {
+        @Override
+        public OpenWeatherMap createFromParcel(Parcel source) {
+            return new OpenWeatherMap(source);
+        }
+
+        @Override
+        public OpenWeatherMap[] newArray(int size) {
+            return new OpenWeatherMap[size];
+        }
+    };
 }

@@ -1,5 +1,8 @@
 package com.dynasoft.weather.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by sundeep on 10/11/17.
  */
 
-public class Rain {
+public class Rain implements Parcelable {
 
     @SerializedName("3h")
     @Expose
@@ -25,4 +28,29 @@ public class Rain {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.rainHours);
+    }
+
+    protected Rain(Parcel in) {
+        this.rainHours = in.readString();
+    }
+
+    public static final Parcelable.Creator<Rain> CREATOR = new Parcelable.Creator<Rain>() {
+        @Override
+        public Rain createFromParcel(Parcel source) {
+            return new Rain(source);
+        }
+
+        @Override
+        public Rain[] newArray(int size) {
+            return new Rain[size];
+        }
+    };
 }

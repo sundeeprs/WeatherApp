@@ -1,6 +1,7 @@
 package com.dynasoft.weather.model;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,8 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by sundeep on 10/11/17.
  */
 
-public class Main
-{
+public class Main implements Parcelable {
 
     @SerializedName("temp")
     @Expose
@@ -33,16 +33,6 @@ public class Main
     @SerializedName("grnd_level")
     @Expose
     private Double grndLevel;
-
-    protected Main(Parcel in) {
-        this.temp = ((Double) in.readValue((Double.class.getClassLoader())));
-        this.pressure = ((Double) in.readValue((Double.class.getClassLoader())));
-        this.humidity = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        this.tempMin = ((Double) in.readValue((Double.class.getClassLoader())));
-        this.tempMax = ((Double) in.readValue((Double.class.getClassLoader())));
-        this.seaLevel = ((Double) in.readValue((Double.class.getClassLoader())));
-        this.grndLevel = ((Double) in.readValue((Double.class.getClassLoader())));
-    }
 
     /**
      * No args constructor for use in serialization
@@ -128,7 +118,41 @@ public class Main
         this.grndLevel = grndLevel;
     }
 
+    @Override
     public int describeContents() {
         return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.temp);
+        dest.writeValue(this.pressure);
+        dest.writeValue(this.humidity);
+        dest.writeValue(this.tempMin);
+        dest.writeValue(this.tempMax);
+        dest.writeValue(this.seaLevel);
+        dest.writeValue(this.grndLevel);
+    }
+
+    protected Main(Parcel in) {
+        this.temp = (Double) in.readValue(Double.class.getClassLoader());
+        this.pressure = (Double) in.readValue(Double.class.getClassLoader());
+        this.humidity = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.tempMin = (Double) in.readValue(Double.class.getClassLoader());
+        this.tempMax = (Double) in.readValue(Double.class.getClassLoader());
+        this.seaLevel = (Double) in.readValue(Double.class.getClassLoader());
+        this.grndLevel = (Double) in.readValue(Double.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Main> CREATOR = new Parcelable.Creator<Main>() {
+        @Override
+        public Main createFromParcel(Parcel source) {
+            return new Main(source);
+        }
+
+        @Override
+        public Main[] newArray(int size) {
+            return new Main[size];
+        }
+    };
 }

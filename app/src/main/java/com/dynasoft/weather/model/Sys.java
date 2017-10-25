@@ -1,6 +1,7 @@
 package com.dynasoft.weather.model;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,8 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by sundeep on 10/11/17.
  */
 
-public class Sys
-{
+public class Sys implements Parcelable {
     @SerializedName("type")
     @Expose
     private int type;
@@ -96,14 +96,39 @@ public class Sys
     }
 
 
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(message);
-        dest.writeValue(country);
-        dest.writeValue(sunrise);
-        dest.writeValue(sunset);
-    }
-
+    @Override
     public int describeContents() {
         return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.type);
+        dest.writeString(this.id);
+        dest.writeValue(this.message);
+        dest.writeString(this.country);
+        dest.writeValue(this.sunrise);
+        dest.writeValue(this.sunset);
+    }
+
+    protected Sys(Parcel in) {
+        this.type = in.readInt();
+        this.id = in.readString();
+        this.message = (Double) in.readValue(Double.class.getClassLoader());
+        this.country = in.readString();
+        this.sunrise = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.sunset = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Sys> CREATOR = new Parcelable.Creator<Sys>() {
+        @Override
+        public Sys createFromParcel(Parcel source) {
+            return new Sys(source);
+        }
+
+        @Override
+        public Sys[] newArray(int size) {
+            return new Sys[size];
+        }
+    };
 }
